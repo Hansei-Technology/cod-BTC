@@ -14,7 +14,7 @@ public class LiftController{
     public int currentPos;
     public PIDController pidController;
 
-    int MaxPoz = 1350;
+    public int MaxPoz = 1350;
     int MidPoz = 700;
     int MinPoz = 0;
 
