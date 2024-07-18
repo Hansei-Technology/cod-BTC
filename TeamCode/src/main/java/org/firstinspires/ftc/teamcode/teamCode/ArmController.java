@@ -15,6 +15,7 @@ public class ArmController{
     public static int MaxPoz = 900;
     public static int MidPoz = 550;
     public static int MinPoz = 150;
+    public static int topStackLevelPos = 350;
     DcMotorEx armMotor;
     public ArmController(HardwareMap map)
     {
@@ -39,6 +40,19 @@ public class ArmController{
         target = MidPoz;
         armMotor.setTargetPosition(target);
     }
+    public void goToCollect(int stackLevel){
+        if(stackLevel==5)
+        {
+            target = topStackLevelPos;
+        } else
+        {
+            int level = 5 - topStackLevelPos;
+            target = 10*level;
+        }
+        armMotor.setTargetPosition(target);
+
+    }
+
     public void update()
     {
         currentPos = armMotor.getCurrentPosition();

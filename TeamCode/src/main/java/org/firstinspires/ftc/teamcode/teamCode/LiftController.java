@@ -46,7 +46,9 @@ public class LiftController{
     {
         target = pos;
     }
-
+    public void goToCollect(){
+        target = 1000;
+    }
     public void up(double x)
     {
         if (target < MaxPoz)

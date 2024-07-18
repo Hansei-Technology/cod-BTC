@@ -15,22 +15,14 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(14, 65, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(14,64, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(13, 45, Math.toRadians(-120)))//pune pixel pe right
+                                .lineToLinearHeading(new Pose2d(13, 60, Math.toRadians(-110)))
+                                .lineToLinearHeading(new Pose2d(50, 32, Math.toRadians(0)))
+                                .lineToLinearHeading(new Pose2d(23, 10.8, Math.toRadians(180)))
+                                .lineToConstantHeading(new Vector2d(-46.8, 10.8))
+                                .lineToConstantHeading(new Vector2d(23, 10.8))
+                                .lineToLinearHeading(new Pose2d(50, 32, Math.toRadians(0)))
 
-
-                                .lineToLinearHeading(new Pose2d(20, 45, Math.toRadians(0))) //rotire
-                                .lineToConstantHeading(new Vector2d(46, 30)) //merge la backdrop
-
-
-
-                                .lineToLinearHeading(new Pose2d(23, 11, Math.toRadians(180))) //rotire+diag
-
-                                .lineToLinearHeading(new Pose2d(-53, 11, Math.toRadians(180)) //trece pe sub door si aj la stack
-
-
-
-                                ) .build()
+                                .build()
                                 );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
