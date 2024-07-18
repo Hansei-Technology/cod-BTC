@@ -42,4 +42,15 @@ public class ClawController {
             right.setPosition(rightOpen);
         }
     }
+
+    public void openLeft() {
+        leftStatus = Status.OPEN;
+        left.setPosition(leftOpen);
+    }
+
+    public void openRight() {
+        rightStatus = Status.OPEN;
+        right.setPosition(rightOpen);
+    }
+
 }

@@ -50,12 +50,12 @@ public class BACKDROP_BLUE_CYCLE_ASYNC extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(13, 60, Math.toRadians(-110)))
                 .build();
         Trajectory yellowPixelTraj = drive.trajectoryBuilder(preloadLineTraj.end())
-                .lineToLinearHeading(new Pose2d(50, 32, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(50, 27, Math.toRadians(0)))
                 .build();
         Trajectory goToSafeTraj = drive.trajectoryBuilder(yellowPixelTraj.end())
-                .lineToLinearHeading(new Pose2d(23, 10.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(35, 5, Math.toRadians(0)))
                 .build();
-        Trajectory goToStackTraj = drive.trajectoryBuilder(goToSafeTraj.end())
+        Trajectory goToStackTraj = drive.trajectoryBuilder(new Pose2d(goToSafeTraj.end().vec(), Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(-46.8, 10.8, Math.toRadians(180)))
                 .build();
         TrajectorySequence goToBackdropTraj = drive.trajectorySequenceBuilder(goToStackTraj.end())
@@ -131,8 +131,10 @@ public class BACKDROP_BLUE_CYCLE_ASYNC extends LinearOpMode {
 //                            currentState = State.PARK;
 //                            drive.followTrajectoryAsync(parkTraj);
 //                        }
+                        drive.turnAsync(Math.toRadians(180));
                         currentState = State.IDLE;
 //                        drive.followTrajectoryAsync(goToStackTraj);
+                        break;
                     }
                 }
                 case GO_TO_STACK:
