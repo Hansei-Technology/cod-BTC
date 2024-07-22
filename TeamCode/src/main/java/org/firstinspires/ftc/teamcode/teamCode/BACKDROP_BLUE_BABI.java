@@ -19,7 +19,7 @@ public class BACKDROP_BLUE_BABI extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {{
                 drive = new SampleMecanumDrive(hardwareMap);
-                Pose2d START_POSE = new Pose2d(14, 65, Math.toRadians(-90));
+                Pose2d SAFE2_POSE = new Pose2d(14, 65, Math.toRadians(-90));
                 robot = new Robot(this);
                 robot.start();
                 robot.arm.goMid();
