@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -71,12 +72,6 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
         ClawController clawController = new ClawController(hardwareMap);
         JointController jointController = new JointController(hardwareMap);
         ArmController armController  =  new ArmController(hardwareMap);
-        armController.goMid();
-        jointController.goToUp();
-        clawController.toggleLeft();
-        clawController.toggleRight();
-        liftController.update();
-        armController.update();
 
         ElapsedTime timeLeft = new ElapsedTime();
 
@@ -100,6 +95,25 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
                 .lineToLinearHeading(RIGHT_YELLOW)
                 .build();
 
+        jointController.goToMid();
+        clawController.toggleLeft();
+        clawController.toggleRight();
+
+        armController.goToPoz(700);
+        liftController.goTOPos(-50);
+
+
+        while(opModeInInit()) {
+            armController.update();
+            liftController.update();
+            if(armController.currentPos > 500) {
+                jointController.goToPoz(0.87);
+                armController.goToPoz(550);
+            }
+        }
+
+        liftController.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftController.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 

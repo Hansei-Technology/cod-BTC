@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.teamCode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Autonomous
+@Config
 public class STACK_RED_PRELOADS extends LinearOpMode {
 
     enum State {
@@ -23,32 +26,32 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
 
     State currentState = State.IDLE;
 
-    public static double RIGHT_PURPLE_X = -38, RIGHT_PURPLE_Y = -54, RIGHT_PURPLE_ANGLE = 124;
+    public static double RIGHT_PURPLE_X = -36, RIGHT_PURPLE_Y = -60, RIGHT_PURPLE_ANGLE = 70;
     Pose2d RIGHT_PURPLE = new Pose2d(RIGHT_PURPLE_X, RIGHT_PURPLE_Y, Math.toRadians(RIGHT_PURPLE_ANGLE));
 
-    public static double LEFT_PURPLE_X = -36, LEFT_PURPLE_Y = -60, LEFT_PURPLE_ANGLE = 70;
+    public static double LEFT_PURPLE_X = -38, LEFT_PURPLE_Y = -54, LEFT_PURPLE_ANGLE = 114;
     Pose2d LEFT_PURPLE = new Pose2d(LEFT_PURPLE_X, LEFT_PURPLE_Y, Math.toRadians(LEFT_PURPLE_ANGLE));
 
-    public static double MID_PURPLE_X = -45, MID_PURPLE_Y = -0.5, MID_PURPLE_ANGLE = -135;
+    public static double MID_PURPLE_X = -60, MID_PURPLE_Y = -7, MID_PURPLE_ANGLE = -45;
     Pose2d MID_PURPLE = new Pose2d(MID_PURPLE_X, MID_PURPLE_Y, Math.toRadians(MID_PURPLE_ANGLE));
 
 
-    public static double LEFT_YELLOW_X = 46.5, LEFT_YELLOW_Y = -20, LEFT_YELLOW_ANGLE = -8;
+    public static double LEFT_YELLOW_X = 40, LEFT_YELLOW_Y = -29, LEFT_YELLOW_ANGLE = 0;
     Pose2d LEFT_YELLOW = new Pose2d(LEFT_YELLOW_X, LEFT_YELLOW_Y, Math.toRadians(LEFT_YELLOW_ANGLE));
 
-    public static double RIGHT_YELLOW_X = 45.5, RIGHT_YELLOW_Y = -33, RIGHT_YELLOW_ANGLE = 0;
+    public static double RIGHT_YELLOW_X = 39, RIGHT_YELLOW_Y = -44.5, RIGHT_YELLOW_ANGLE = -8;
     Pose2d RIGHT_YELLOW = new Pose2d(RIGHT_YELLOW_X, RIGHT_YELLOW_Y, Math.toRadians(RIGHT_YELLOW_ANGLE));
 
-    public static double MID_YELLOW_X = 45, MID_YELLOW_Y = -25.5, MID_YELLOW_ANGLE = 0;
+    public static double MID_YELLOW_X = 40, MID_YELLOW_Y = -35, MID_YELLOW_ANGLE = 0;
     Pose2d MID_YELLOW = new Pose2d(MID_YELLOW_X, MID_YELLOW_Y, Math.toRadians(MID_YELLOW_ANGLE));
 
     public static double START_POSE_X = -35.5, START_POSE_Y = -62.5, START_POSE_ANGLE = 90;
     Pose2d START_POSE = new Pose2d(START_POSE_X, START_POSE_Y, Math.toRadians(START_POSE_ANGLE));
 
-    public static double SAFE1_POSE_X = -45, SAFE1_POSE_Y = 3, SAFE1_POSE_ANGLE = 0;
+    public static double SAFE1_POSE_X = -62, SAFE1_POSE_Y = -8, SAFE1_POSE_ANGLE = 0; //-45 before
     Pose2d SAFE1_POSE = new Pose2d(SAFE1_POSE_X, SAFE1_POSE_Y, Math.toRadians(SAFE1_POSE_ANGLE));
 
-    public static double SAFE2_POSE_X = 15, SAFE2_POSE_Y = 3, SAFE2_POSE_ANGLE = 0;
+    public static double SAFE2_POSE_X = 15, SAFE2_POSE_Y = -8, SAFE2_POSE_ANGLE = 0;
     Pose2d SAFE2_POSE = new Pose2d(SAFE2_POSE_X, SAFE2_POSE_Y, Math.toRadians(SAFE2_POSE_ANGLE));
     public static double PARK_X = 42, PARK_Y = -5, PARK_ANGLE = 0;
     Pose2d PARK = new Pose2d(PARK_X, PARK_Y, Math.toRadians(PARK_ANGLE));
@@ -61,7 +64,7 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
         RIGHT,
         MID
     }
-    random result = random.MID;
+    random result = random.RIGHT;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -72,12 +75,6 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
         ClawController clawController = new ClawController(hardwareMap);
         JointController jointController = new JointController(hardwareMap);
         ArmController armController  =  new ArmController(hardwareMap);
-        armController.goMid();
-        jointController.goToUp();
-        clawController.toggleLeft();
-        clawController.toggleRight();
-        liftController.update();
-        armController.update();
 
         Trajectory preloadLineLeftTraj = drive.trajectoryBuilder(START_POSE)
                 .lineToLinearHeading(LEFT_PURPLE) //left
@@ -106,12 +103,43 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
 
         ElapsedTime timeLeft = new ElapsedTime();
 
+        jointController.goToMid();
+        clawController.toggleLeft();
+        clawController.toggleRight();
+
+        armController.goToPoz(700);
+        liftController.goTOPos(-50);
+
+
+        while(opModeInInit()) {
+            armController.update();
+            liftController.update();
+            if(armController.currentPos > 500) {
+                jointController.goToPoz(0.87);
+                armController.goToPoz(550);
+            }
+        }
+
+        liftController.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftController.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         waitForStart();
 
         timeLeft.reset();
         if (isStopRequested()) return;
         currentState = State.PRELOAD_LINE;
-        drive.followTrajectoryAsync(preloadLineMidTraj);
+        switch (result) {
+            case LEFT:
+                drive.followTrajectoryAsync(preloadLineLeftTraj);
+                break;
+            case MID:
+                drive.followTrajectoryAsync(preloadLineMidTraj);
+                break;
+            case RIGHT:
+                drive.followTrajectoryAsync(preloadLineRightTraj);
+                break;
+        }
+
         babi = false;
 
         while (opModeIsActive() && !isStopRequested())
@@ -155,7 +183,17 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
                     if(!drive.isBusy())
                     {
                         currentState = State.YELLOW_PIXEL;
-                        drive.followTrajectoryAsync(yellowPixelMidTraj);
+                        switch (result) {
+                            case RIGHT:
+                                drive.followTrajectoryAsync(yellowPixelRightTraj);
+                                break;
+                            case MID:
+                                drive.followTrajectoryAsync(yellowPixelMidTraj);
+                                break;
+                            case LEFT:
+                                drive.followTrajectoryAsync(yellowPixelLeftTraj);
+                                break;
+                        }
                         armController.goMid();
                         liftController.goMid();;
                         jointController.goToMid();

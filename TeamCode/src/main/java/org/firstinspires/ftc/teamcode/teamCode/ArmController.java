@@ -30,6 +30,10 @@ public class ArmController{
         target = MaxPoz;
         armMotor.setTargetPosition(target);
     }
+    public void goToPoz(int poz) {
+        target = poz;
+        armMotor.setTargetPosition(target);
+    }
     public void goDown()
     {
         target = MinPoz;

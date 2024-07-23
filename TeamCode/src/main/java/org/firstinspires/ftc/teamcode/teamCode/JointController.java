@@ -31,4 +31,9 @@ public class JointController {
         left.setPosition(upPoz);
         right.setPosition(upPoz);
     }
+
+    public void goToPoz(double poz) {
+        left.setPosition(poz);
+        right.setPosition(poz);
+    }
 }
