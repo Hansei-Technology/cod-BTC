@@ -9,7 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Utils.CameraDetector;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 @Autonomous
 @Config
@@ -59,15 +62,10 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
     ElapsedTime timerBabi;
     Boolean babi;
 
-    enum random {
-        LEFT,
-        RIGHT,
-        MID
-    }
-    random result = random.RIGHT;
-
     @Override
     public void runOpMode() throws InterruptedException {
+        CameraDetector camera = new CameraDetector(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1")));
+
         timerBabi = new ElapsedTime();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
@@ -110,15 +108,20 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
         armController.goToPoz(700);
         liftController.goTOPos(-50);
 
-
+        CameraDetector.Result result = CameraDetector.Result.CENTER;
         while(opModeInInit()) {
             armController.update();
             liftController.update();
-            if(armController.currentPos > 500) {
+            if(armController.currentPos > 550) {
                 jointController.goToPoz(0.87);
-                armController.goToPoz(550);
+                armController.goToPoz(600);
             }
+            result = camera.detect();
+            telemetry.addLine("Location" + result);
+            telemetry.update();
         }
+        camera.stop();
+        if(result == CameraDetector.Result.NONE) result = CameraDetector.Result.CENTER;
 
         liftController.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftController.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -132,7 +135,7 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
             case LEFT:
                 drive.followTrajectoryAsync(preloadLineLeftTraj);
                 break;
-            case MID:
+            case CENTER:
                 drive.followTrajectoryAsync(preloadLineMidTraj);
                 break;
             case RIGHT:
@@ -149,7 +152,7 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
                 case PRELOAD_LINE:
                 {
                     armController.goDown();
-                    if(result == random.MID) liftController.goTOPos(250);
+                    if(result == CameraDetector.Result.CENTER) liftController.goTOPos(250);
                     else liftController.goTOPos(liftController.MaxPoz);
                     jointController.goToDown();
                     if (!drive.isBusy())
@@ -187,7 +190,7 @@ public class STACK_RED_PRELOADS extends LinearOpMode {
                             case RIGHT:
                                 drive.followTrajectoryAsync(yellowPixelRightTraj);
                                 break;
-                            case MID:
+                            case CENTER:
                                 drive.followTrajectoryAsync(yellowPixelMidTraj);
                                 break;
                             case LEFT:

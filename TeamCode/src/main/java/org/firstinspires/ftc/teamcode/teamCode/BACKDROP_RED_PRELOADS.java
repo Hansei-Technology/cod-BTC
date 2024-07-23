@@ -11,18 +11,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Utils.CameraDetector;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 @Config
 @Autonomous
 public class BACKDROP_RED_PRELOADS extends LinearOpMode {
-
-    enum cases {
-        LEFT,
-        MID,
-        RIGHT
-    }
-    cases result = cases.RIGHT;
 
     public static double RIGHT_PURPLE_X = 13, RIGHT_PURPLE_Y = -60, RIGHT_PURPLE_ANGLE = 70;
     Pose2d RIGHT_PURPLE = new Pose2d(RIGHT_PURPLE_X, RIGHT_PURPLE_Y, Math.toRadians(RIGHT_PURPLE_ANGLE));
@@ -64,6 +60,7 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        CameraDetector camera = new CameraDetector(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1")));
 
         timerBabi = new ElapsedTime();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -102,15 +99,21 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
         armController.goToPoz(700);
         liftController.goTOPos(-50);
 
-
+        CameraDetector.Result result = CameraDetector.Result.CENTER;
         while(opModeInInit()) {
             armController.update();
             liftController.update();
-            if(armController.currentPos > 500) {
+            if(armController.currentPos > 550) {
                 jointController.goToPoz(0.87);
-                armController.goToPoz(550);
+                armController.goToPoz(600);
             }
+
+            result = camera.detect();
+            telemetry.addLine("Location" + result);
+            telemetry.update();
         }
+        camera.stop();
+        if(result == CameraDetector.Result.NONE) result = CameraDetector.Result.CENTER;
 
         liftController.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftController.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -124,7 +127,7 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
             case LEFT:
                 drive.followTrajectoryAsync(preloadLineLeftTraj);
                 break;
-            case MID:
+            case CENTER:
                 drive.followTrajectoryAsync(preloadLineMidTraj);
                 break;
             case RIGHT:
@@ -153,7 +156,7 @@ public class BACKDROP_RED_PRELOADS extends LinearOpMode {
                                 case RIGHT:
                                     drive.followTrajectoryAsync(yellowPixelRightTraj);
                                     break;
-                                case MID:
+                                case CENTER:
                                     drive.followTrajectoryAsync(yellowPixelMidTraj);
                                     break;
                                 case LEFT:

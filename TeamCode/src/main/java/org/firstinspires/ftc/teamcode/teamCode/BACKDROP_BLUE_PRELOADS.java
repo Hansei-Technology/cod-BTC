@@ -8,8 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Utils.CameraDetector;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 @Autonomous
 public class BACKDROP_BLUE_PRELOADS extends LinearOpMode {
@@ -28,6 +31,8 @@ public class BACKDROP_BLUE_PRELOADS extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        CameraDetector camera = new CameraDetector(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1")));
+
         timerBabi = new ElapsedTime();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
@@ -65,15 +70,21 @@ public class BACKDROP_BLUE_PRELOADS extends LinearOpMode {
         armController.goToPoz(700);
         liftController.goTOPos(-50);
 
-
+        CameraDetector.Result result = CameraDetector.Result.CENTER;
         while(opModeInInit()) {
             armController.update();
             liftController.update();
-            if(armController.currentPos > 500) {
+            if(armController.currentPos > 550) {
                 jointController.goToPoz(0.87);
-                armController.goToPoz(550);
+                armController.goToPoz(600);
             }
+
+            result = camera.detect();
+            telemetry.addLine("Location" + result);
+            telemetry.update();
         }
+        camera.stop();
+        if(result == CameraDetector.Result.NONE) result = CameraDetector.Result.CENTER;
 
         liftController.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftController.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -84,7 +95,18 @@ public class BACKDROP_BLUE_PRELOADS extends LinearOpMode {
         timeLeft.reset();
         if (isStopRequested()) return;
         currentState = State.PRELOAD_LINE;
-        drive.followTrajectoryAsync(preloadLineLeftTraj);
+        switch (result) {
+            case LEFT:
+                drive.followTrajectoryAsync(preloadLineLeftTraj);
+                break;
+            case RIGHT:
+                drive.followTrajectoryAsync(preloadLineRightTraj);
+                break;
+            case CENTER:
+                drive.followTrajectoryAsync(preloadLineMidTraj);
+                break;
+        }
+
         babi = false;
 
         while (opModeIsActive() && !isStopRequested())
@@ -103,7 +125,17 @@ public class BACKDROP_BLUE_PRELOADS extends LinearOpMode {
                         babi = true;
                         if(timerBabi.milliseconds() > 200) {
                             currentState = State.YELLOW_PIXEL;
-                            drive.followTrajectoryAsync(yellowPixelLeftTraj);
+                            switch (result) {
+                                case RIGHT:
+                                    drive.followTrajectoryAsync(yellowPixelRightTraj);
+                                    break;
+                                case LEFT:
+                                    drive.followTrajectoryAsync(yellowPixelLeftTraj);
+                                    break;
+                                case CENTER:
+                                    drive.followTrajectoryAsync(yellowPixelMidTraj);
+                                    break;
+                            }
                             armController.goMid();
                             liftController.goMid();
                             jointController.goToMid();
