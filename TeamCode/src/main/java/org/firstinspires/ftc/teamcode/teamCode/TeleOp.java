@@ -72,6 +72,12 @@ public class TeleOp extends LinearOpMode {
                 arm.goUp();
                 joint.goToUp();
             }
+            if (gamepad1.x) {
+                bratEJos = false;
+                arm.goToCapuUrsului();
+                joint.goToDown();
+                lift.goTOPos(0);
+            }
             if (gamepad1.left_trigger != 0) {
                 lift.down(gamepad1.left_trigger);
             }

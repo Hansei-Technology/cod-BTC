@@ -39,6 +39,11 @@ public class ArmController{
         target = MinPoz;
         armMotor.setTargetPosition(target);
     }
+    public void goToCapuUrsului()
+    {
+        target = 320;
+        armMotor.setTargetPosition(target);
+    }
     public void goMid()
     {
         target = MidPoz;
