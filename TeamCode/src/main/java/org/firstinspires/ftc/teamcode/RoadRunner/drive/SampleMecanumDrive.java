@@ -91,19 +91,19 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "IMUnew"); //imu
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD; //down
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP; //back
+        imu = hardwareMap.get(IMU.class, "imu"); //imu
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP; //down
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD; //back
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         // Now initialize the IMU with this mounting orientation
         // Note: if you choose two conflicting directions, this initialization will cause a code exception.
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "m1");
-        leftRear = hardwareMap.get(DcMotorEx.class, "m0");
-        rightRear = hardwareMap.get(DcMotorEx.class, "m2");
-        rightFront = hardwareMap.get(DcMotorEx.class, "m3");
+        leftFront = hardwareMap.get(DcMotorEx.class, "FS");
+        leftRear = hardwareMap.get(DcMotorEx.class, "SS");
+        rightRear = hardwareMap.get(DcMotorEx.class, "SD");
+        rightFront = hardwareMap.get(DcMotorEx.class, "FD");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
