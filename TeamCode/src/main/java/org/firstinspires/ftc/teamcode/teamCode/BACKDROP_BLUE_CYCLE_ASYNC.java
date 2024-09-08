@@ -36,11 +36,11 @@ public class BACKDROP_BLUE_CYCLE_ASYNC extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
         LiftController liftController = new LiftController(hardwareMap);
-        ClawController clawController = new ClawController(hardwareMap);
-        JointController jointController = new JointController(hardwareMap);
+        ClawController2Servo clawController = new ClawController2Servo(hardwareMap);
+        JointController2Servo jointController = new JointController2Servo(hardwareMap);
         ArmController armController  =  new ArmController(hardwareMap);
         armController.goMid();
-        jointController.goToUp();
+        jointController.goToLevel();
         clawController.toggleLeft();
         clawController.toggleRight();
         liftController.update();

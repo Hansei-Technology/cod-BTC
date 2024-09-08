@@ -12,14 +12,14 @@ public class ArmController{
     double power;
     public int target = 0;
     public int currentPos;
-    public static int MaxPoz = 900;
-    public static int MidPoz = 550;
-    public static int MinPoz = 150;
+    public static int MaxPoz = 1300;
+    public static int MidPoz = 520;
+    public static int MinPoz = 320;
     public static int topStackLevelPos = 350;
     DcMotorEx armMotor;
     public ArmController(HardwareMap map)
     {
-        armMotor = map.get(DcMotorEx.class, "m0e");
+        armMotor = map.get(DcMotorEx.class, "m1e");
 
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.teamCode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class ClawController {
+public class ClawController2Servo {
     Servo left, right;
     double leftClosed = 0.6;
     double leftOpen = 0.45;
@@ -19,7 +19,7 @@ public class ClawController {
     Status leftStatus = Status.OPEN;
     Status rightStatus = Status.OPEN;
 
-    public ClawController (HardwareMap map) {
+    public ClawController2Servo(HardwareMap map) {
         left = map.get(Servo.class, "s0e");
         right = map.get(Servo.class, "s2e");
     }

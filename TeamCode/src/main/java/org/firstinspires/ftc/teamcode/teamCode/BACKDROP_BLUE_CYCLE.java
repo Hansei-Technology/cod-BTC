@@ -23,7 +23,7 @@ public class BACKDROP_BLUE_CYCLE extends LinearOpMode {
                 robot = new Robot(this);
                 robot.start();
                 robot.arm.goMid();
-                robot.joint.goToUp();
+                robot.joint.goToLevel();
                 robot.claw.toggleLeft();
                 robot.claw.toggleRight();
                 drive.setPoseEstimate(START_POSE);

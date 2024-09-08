@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.teamCode.ArmController;
-import org.firstinspires.ftc.teamcode.teamCode.JointController;
+import org.firstinspires.ftc.teamcode.teamCode.JointController2Servo;
 import org.firstinspires.ftc.teamcode.teamCode.LiftController;
 
 @TeleOp
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.teamCode.LiftController;
 public class InitPoseFinder extends LinearOpMode {
     LiftController lift;
     ArmController arm;
-    JointController joint;
+    JointController2Servo joint;
 
     public static int liftPoz = 0, armPoz = 0;
     public static double jointPoz = 0.5;
@@ -21,7 +21,7 @@ public class InitPoseFinder extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         lift = new LiftController(hardwareMap);
         arm = new ArmController(hardwareMap);
-        joint = new JointController(hardwareMap);
+        joint = new JointController2Servo(hardwareMap);
 
         waitForStart();
 

@@ -15,7 +15,7 @@ public class LiftController{
     public int currentPos;
     public PIDController pidController;
 
-    public int MaxPoz = 1350;
+    public int MaxPoz = 2100;
     int MidPoz = 700;
     int MinPoz = 0;
 
@@ -24,7 +24,8 @@ public class LiftController{
     {
         pidController = new PIDController(P, I, D);
         pidController.maxOutput = 0.8;
-        liftMotor = map.get(DcMotorEx.class, "m1e");
+        liftMotor = map.get(DcMotorEx.class, "m0e");
+        pidController.maxOutput = 1;
 
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);

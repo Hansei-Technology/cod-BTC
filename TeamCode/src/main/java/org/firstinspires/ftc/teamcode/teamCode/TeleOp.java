@@ -17,10 +17,10 @@ public class TeleOp extends LinearOpMode {
     StickyGamepad sticky2;
     ChassisController sasiu;
     ArmController arm;
-    JointController joint;
+    JointController2Servo joint;
     LiftController lift;
 
-    ClawController claw;
+    ClawController1Servo claw;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,8 +29,8 @@ public class TeleOp extends LinearOpMode {
         sasiu = new ChassisController(hardwareMap);
         arm = new ArmController(hardwareMap);
         lift = new LiftController(hardwareMap);
-        claw = new ClawController(hardwareMap);
-        joint = new JointController(hardwareMap);
+        claw = new ClawController1Servo(hardwareMap);
+        joint = new JointController2Servo(hardwareMap);
         joint.goToMid();
         arm.goMid();
         sticky1 = new StickyGamepad(gamepad1, this);
@@ -46,38 +46,37 @@ public class TeleOp extends LinearOpMode {
             sticky1.update();
             sticky2.update();
 
-            if(lift.currentPos > 400 && bratEJos)
-            {
-                arm.target = 110;
-            }
+//            if(lift.currentPos > 400 && bratEJos)
+//            {
+//                arm.target = 500;
+//            }
 
 
             if(gamepad1.a)
             {
                 bratEJos = true;
                 arm.goDown();
-                joint.goToDown();
+                joint.goToLevel();
                 lift.goTOPos(300);
             }
             if(gamepad1.b)
             {
                 bratEJos = false;
                 arm.goMid();
-                joint.goToMid();
+                joint.goToLevel();
                 lift.goTOPos(0);
             }
             if(gamepad1.y)
             {
                 bratEJos = false;
                 arm.goUp();
-                joint.goToUp();
+                joint.goToLevel();
             }
-            if (gamepad1.x) {
-                bratEJos = false;
-                arm.goToCapuUrsului();
-                joint.goToDown();
-                lift.goTOPos(0);
+
+            if(gamepad1.x) {
+                joint.goToMid();
             }
+
             if (gamepad1.left_trigger != 0) {
                 lift.down(gamepad1.left_trigger);
             }
@@ -89,11 +88,12 @@ public class TeleOp extends LinearOpMode {
                 lift.goUp(); }
             if (gamepad1.dpad_left) {
                 lift.goMid(); }
-            if (sticky1.right_bumper) {
-                claw.toggleRight();
-            }
+
             if (sticky1.left_bumper) {
-                claw.toggleLeft();
+                claw.toggle();
+            }
+            if(gamepad1.right_bumper) {
+                joint.goToDown();
             }
 
             telemetry.addData("glis: ", lift.currentPos);

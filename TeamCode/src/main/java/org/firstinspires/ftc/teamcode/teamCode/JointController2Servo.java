@@ -5,15 +5,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-public class JointController {
+public class JointController2Servo {
     Servo left, right;
-    public static double downPoz = 0.485;
-    public static double midPoz = 0.4;
-    public static double upPoz = 0.5;
+    public static double downPoz = 0.6;
+    public static double midPoz = 0.5;
+    public static double upPoz = 0.32;
 
-    public JointController (HardwareMap map) {
-        left = map.get(Servo.class, "s1e");
-        right = map.get(Servo.class, "s3e");
+    public JointController2Servo(HardwareMap map) {
+        left = map.get(Servo.class, "s0");
+        right = map.get(Servo.class, "s4");
     }
 
     public void goToMid()
@@ -26,7 +26,7 @@ public class JointController {
         left.setPosition(downPoz);
         right.setPosition(downPoz);
     }
-    public void goToUp()
+    public void goToLevel()
     {
         left.setPosition(upPoz);
         right.setPosition(upPoz);

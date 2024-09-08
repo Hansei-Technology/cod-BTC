@@ -23,7 +23,7 @@ public class AutoPisu extends LinearOpMode {
                 robot = new Robot(this);
                 robot.start();
                 robot.arm.goMid();
-                robot.joint.goToUp();
+                robot.joint.goToLevel();
                 robot.claw.toggleLeft();
                 robot.claw.toggleRight();
                 drive.setPoseEstimate(START_POSE);
@@ -45,7 +45,7 @@ public class AutoPisu extends LinearOpMode {
                         .lineToConstantHeading(new Vector2d(46, 30)) //merge la backdrop
                                 .addTemporalMarker(() -> {
                                             robot.lift.goMid();
-                                            robot.joint.goToUp();
+                                            robot.joint.goToLevel();
                                         })
                                         .waitSeconds(0)
                                         .waitSeconds(0.02)
