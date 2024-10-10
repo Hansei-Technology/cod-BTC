@@ -76,11 +76,9 @@ public class TeleOp extends LinearOpMode {
                 joint.goToMid();
             }
 
-            if (gamepad1.left_trigger != 0) {
-                lift.setPower(gamepad1.left_trigger);
+            if (gamepad1.left_stick_y != 0) {
+                lift.setPower(gamepad1.left_stick_y);
             }
-            if (gamepad1.right_trigger != 0) {
-                lift.setPower(gamepad1.right_trigger); }
 
             if (gamepad1.dpad_down) {
                 oriz.close(); }
