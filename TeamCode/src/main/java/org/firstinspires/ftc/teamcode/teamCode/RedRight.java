@@ -65,13 +65,13 @@ public class RedRight extends LinearOpMode {
                         lift.goDown();
                      })
                     .waitSeconds(0)
-                .lineToLinearHeading(SAFE)
-                .lineToLinearHeading(SAFE2)
-                .lineToLinearHeading(ELEM1)
-                .lineToLinearHeading(HUMAN)
-                .lineToLinearHeading(SAFE2)
-                .lineToLinearHeading(ELEM2)
-                .lineToLinearHeading(HUMAN)
+//                .lineToLinearHeading(SAFE)
+//                .lineToLinearHeading(SAFE2)
+//                .lineToLinearHeading(ELEM1)
+//                .lineToLinearHeading(HUMAN)
+//                .lineToLinearHeading(SAFE2)
+//                .lineToLinearHeading(ELEM2)
+//                .lineToLinearHeading(HUMAN)
                 .build());
 
 
