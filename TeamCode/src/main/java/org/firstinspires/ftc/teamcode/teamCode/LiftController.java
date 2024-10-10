@@ -15,7 +15,7 @@ public class LiftController {
     public DcMotorEx left;
     public DcMotorEx right;
     //double kp = 0.02, kd = 0.01, ki = 0.002;
-    public static double kp = 0.01, kd = 0, ki = 0;
+    public static double kp = 0.002, kd = -1, ki = 0.05;
     PIDController pidController = new PIDController(kp, kd, ki);
     public static double magicPOWER = -0.3;
     public int position;
