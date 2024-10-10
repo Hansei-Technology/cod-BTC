@@ -15,7 +15,7 @@ public class LiftController {
     public DcMotorEx left;
     public DcMotorEx right;
     //double kp = 0.02, kd = 0.01, ki = 0.002;
-    public static double kp = 0.002, kd = -1, ki = 0.05;
+    public static double kp = 0.01, kd = 0, ki = 0;
     PIDController pidController = new PIDController(kp, kd, ki);
     public static double magicPOWER = -0.3;
     public int position;
@@ -25,6 +25,7 @@ public class LiftController {
     public static int MID_POS = 310;
     public static int GRAB_POS = 100;
     public boolean pidON = true;
+    TwoMotorSystem liftSystem;
 
     public enum States {
         RETRACT_PID,
@@ -41,6 +42,8 @@ public class LiftController {
     public LiftController(HardwareMap map) {
         left = map.get(DcMotorEx.class, "m0e");
         right = map.get(DcMotorEx.class, "m1e");
+
+
 
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -59,19 +62,19 @@ public class LiftController {
         pidController.targetValue = 0;
 
         timer = new ElapsedTime();
+        liftSystem = new TwoMotorSystem(left, right); //thread
+        liftSystem.start();
     }
 
     public void setPower(double power) {
         if(power > 0.1 || power < -0.1) {
             pidON = false;
             if(position < MAX_POS - 50 && power > 0) {
-                left.setPower(power);
-                right.setPower(power);
+                liftSystem.power = power;
                 currentState = States.EXTENDED;
             }
             if(position > 10 && power < 0) {
-                left.setPower(power);
-                right.setPower(power);
+                liftSystem.power = power;
             }
         }
     }
@@ -124,8 +127,7 @@ public class LiftController {
         }
 
             double powerExtendo = pidController.update(position);
-            left.setPower(powerExtendo);
-            right.setPower(powerExtendo);
+            liftSystem.power = powerExtendo;
         }
     }
 
