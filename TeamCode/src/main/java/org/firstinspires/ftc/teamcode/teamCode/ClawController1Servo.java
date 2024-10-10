@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ClawController1Servo {
     Servo left;
-    double Closed = 0.8;
-    double Open = 0.4;
+    double Closed = 0.7;
+    double Open = 0.3;
 
     public enum Status
     {
