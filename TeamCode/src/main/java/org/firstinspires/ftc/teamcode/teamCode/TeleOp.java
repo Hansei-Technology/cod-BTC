@@ -1,107 +1,103 @@
-package org.firstinspires.ftc.teamcode.teamCode;
+package org.firstinspires.ftc.teamcode.TeamCode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.teamcode.TeamCode.Vert;
 
 import org.firstinspires.ftc.teamcode.Utils.StickyGamepad;
 
-
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
+
 @Config
 public class TeleOp extends LinearOpMode {
 
-    boolean bratEJos = false;
+    Cleste1 cleste1;
+    Sasiu sasiu;
+    Oriz oriz;
+    Vert vert;
     StickyGamepad sticky1;
     StickyGamepad sticky2;
-    ChassisController sasiu;
-    JointController1Servo joint;
-    LiftController lift;
-    OrizController oriz;
-
-    ClawController1Servo claw;
+    Cleste2 cleste2;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        oriz = new OrizController(hardwareMap);
-        sasiu = new ChassisController(hardwareMap);
-        lift = new LiftController(hardwareMap);
-        claw = new ClawController1Servo(hardwareMap);
-        joint = new JointController1Servo(hardwareMap);
-        joint.goToMid();
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        sasiu = new Sasiu(hardwareMap);
+        cleste1 = new Cleste1(hardwareMap);
+        oriz = new Oriz(hardwareMap);
         sticky1 = new StickyGamepad(gamepad1, this);
         sticky2 = new StickyGamepad(gamepad2, this);
+        cleste2 = new Cleste2(hardwareMap);
+        vert = new Vert(hardwareMap);
+
 
         waitForStart();
-        while(opModeIsActive())
-        {
+
+        cleste2.goToLevel();
+        cleste1.open();
+        
+        while(opModeIsActive()){
 
             sasiu.move(gamepad1);
-            lift.update();
+            vert.update();
             sticky1.update();
             sticky2.update();
 
-//            if(lift.currentPos > 400 && bratEJos)
-//            {
-//                arm.target = 500;
-//            }
-
-
-            if(gamepad1.a)
-            {
-                bratEJos = true;
-                joint.goToLevel();
-                oriz.close();
-                lift.goDown();
-            }
-            if(gamepad1.b)
-            {
-                bratEJos = false;
-                joint.goToLevel();
-                oriz.close();
-                lift.goToMid();
-            }
-            if(gamepad1.y)
-            {
-                bratEJos = false;
-                lift.goToHigh();
-                oriz.close();
-                joint.goToLevel();
+            if(gamepad1.right_trigger > 0.1){
+                oriz.Open();
             }
 
-            if(gamepad1.x) {
-                joint.goToMid();
+            if(gamepad1.left_trigger > 0.1){
+                oriz.Close();
             }
 
-            if (gamepad1.left_stick_y != 0) {
-                lift.setPower(gamepad1.left_stick_y);
+            if(sticky1.left_bumper){
+                cleste1.Toggle();
             }
 
-            if (gamepad1.dpad_down) {
-                oriz.close(); }
-            if (gamepad1.dpad_up) {
-                joint.goToDown();
-                oriz.open(); }
-
-            if(gamepad1.dpad_right) {
-                lift.goToPoz(lift.GRAB_POS);
+            if(gamepad1.a){
+                oriz.Close();
+                cleste2.goToLevel();
+                vert.goDown();
             }
 
-            if (sticky1.left_bumper) {
-                claw.toggle();
+            if(gamepad1.b){
+                oriz.Close();
+                cleste2.goToLevel();
+                vert.goToMid();
             }
 
-            if(gamepad1.right_bumper) {
-                joint.goToDown();
-                oriz.open();
+            if(gamepad1.y){
+                oriz.Close();
+                cleste2.goToLevel();
+                vert.goToHigh();
             }
 
-            lift.update();
-            telemetry.addData("glis: ", lift.position);
+            if(sticky1.right_bumper){
+                cleste2.Toggle();
+            }
+
+            if(gamepad1.x){
+                vert.goToPoz(vert.GRAB_POS);
+            }
+
+            if(gamepad1.dpad_right){
+                vert.goToCapuUrsului();
+            }
+
+            if(gamepad1.dpad_left){
+                cleste2.goToMid();
+            }
+
+
+            vert.update();
+            telemetry.addData("glis: ", vert.position);
             telemetry.update();
         }
+
     }
 }
