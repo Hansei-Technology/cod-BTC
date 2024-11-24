@@ -20,11 +20,11 @@ public class Oriz {
         motor.setPosition(poz);
     }
 
-    public void Open(){
+    public void open(){
         motor.setPosition(max);
     }
 
-    public void Close(){
+    public void close(){
         motor.setPosition(min);
     }
 

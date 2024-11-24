@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -21,9 +20,6 @@ public class Auto2Specimene extends LinearOpMode {
     public static double SAFE3_x = 19, SAFE3_y = -65, SAFE3_heading = 180;
     public static double SPECIMEN_x = 5, SPECIMIEN_y = -65  , SPECIMEN_heading = 180;
     public static double PRELOAD2_x = 34.5, PRELOAD2_y = 0, PRELOAD2_heading = 0;
-    //public static double clesteInchis = 0.7;
-    //public static double clesteDeschis = 0.3;
-    //public Servo motorCleste;
 
     public void runOpMode() throws InterruptedException{
 
@@ -31,9 +27,8 @@ public class Auto2Specimene extends LinearOpMode {
 
         Oriz oriz = new Oriz(hardwareMap);
         Vert vert = new Vert(hardwareMap);
-        //motorCleste = hardwareMap.get(Servo.class, "s3");
-        Cleste1 cleste1 = new Cleste1(hardwareMap);
-        Cleste2 cleste2 = new Cleste2(hardwareMap);
+        Cleste cleste = new Cleste(hardwareMap);
+        Joint joint = new Joint(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d PRELOAD = new Pose2d(PRELOAD_x, PRELOAD_y, Math.toRadians(PRELOAD_heading));
@@ -47,13 +42,11 @@ public class Auto2Specimene extends LinearOpMode {
 
 
         oriz.goToPoz(0.4);
-        cleste2.goToLevel();
-        cleste1.close();
-        //motorCleste.setPosition(0.7);
+        joint.goToLevel();
+        cleste.close();
 
         waitForStart();
 
-        cleste1.setStatus(Cleste1.Status.INCHIS);
 
         vert.goToHigh();
 
@@ -67,7 +60,7 @@ public class Auto2Specimene extends LinearOpMode {
                 .waitSeconds(0.4)
                         .waitSeconds(0)
                         .addTemporalMarker( () -> {
-                            cleste1.open();
+                            cleste.open();
                         })
                         .waitSeconds(0.5)
                         .waitSeconds(0)
@@ -92,7 +85,7 @@ public class Auto2Specimene extends LinearOpMode {
                         .waitSeconds(0.1)
                         .waitSeconds(0)
                         .addTemporalMarker( () -> {
-                            cleste1.close();
+                            cleste.close();
                         })
                         .lineToLinearHeading(PRELOAD2)
                 .addTemporalMarker( () -> {
@@ -102,7 +95,7 @@ public class Auto2Specimene extends LinearOpMode {
                 .waitSeconds(0.5)
                         .waitSeconds(0)
                         .addTemporalMarker( () -> {
-                            cleste1.open();
+                            cleste.open();
                         })
                 .waitSeconds(0.5)
                 .waitSeconds(0)

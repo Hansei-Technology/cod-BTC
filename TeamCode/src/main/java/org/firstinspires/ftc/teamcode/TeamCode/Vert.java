@@ -22,7 +22,7 @@ public class Vert {
     public static int HIGH_POS = 2280;
     public static int LOW_POS = 0;
     public static int MID_POS = 1500;
-    public static int GRAB_POS = 2700;
+    public static int COS_POS = 2700;
     public boolean pidON = true;
     public static int ursu = 200;
 
@@ -161,6 +161,9 @@ public class Vert {
 
     public void goToHigh(){
         goToPoz(HIGH_POS);
+    }
+    public void goToCos(){
+        goToPoz(COS_POS);
     }
 
     public void setRawPower(double power){

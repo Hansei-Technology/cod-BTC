@@ -23,8 +23,8 @@ public class AutoGit extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         Oriz oriz = new Oriz(hardwareMap);
         Vert vert = new Vert(hardwareMap);
-        Cleste1 cleste1 = new Cleste1(hardwareMap);
-        Cleste2 cleste2 = new Cleste2(hardwareMap);
+        Cleste cleste = new Cleste(hardwareMap);
+        Joint joint = new Joint(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d PRELOAD = new Pose2d(PRELOAD_x, PRELOAD_y, Math.toRadians(PRELOAD_heading));
@@ -37,8 +37,8 @@ public class AutoGit extends LinearOpMode {
         Pose2d HUMAN2 = new Pose2d(HUMAN2_x, HUMAN2_y, Math.toRadians(HUMAN2_heading));
 
         oriz.goToPoz(0.4);
-        cleste1.close();
-        cleste2.goToLevel();
+        cleste.close();
+        joint.goToLevel();
 
         waitForStart();
 
@@ -53,7 +53,7 @@ public class AutoGit extends LinearOpMode {
                 .waitSeconds(0)
                 .waitSeconds(0.3)
                 .addTemporalMarker( () -> {
-                    cleste1.open();
+                    cleste.open();
                 })
                 .waitSeconds(0.5)
                 .waitSeconds(0)
