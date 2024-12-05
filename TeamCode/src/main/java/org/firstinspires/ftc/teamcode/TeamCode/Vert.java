@@ -24,7 +24,7 @@ public class Vert {
     public static int MID_POS = 1500;
     public static int COS_POS = 2700;
     public boolean pidON = true;
-    public static int ursu = 200;
+    public static int ursu = 300;
 
     public enum States {
         RETRACT_PID,

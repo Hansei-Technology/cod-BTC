@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Cleste {
 
     Servo servo;
-    public static double openPos = 0.3;
-    public static double closePos = 0.67;
+    public static double openPos = 0.9;
+    public static double closePos = 0.55;
+            ;
     public Cleste(HardwareMap map){
         servo = map.get(Servo.class, "s2");
     }

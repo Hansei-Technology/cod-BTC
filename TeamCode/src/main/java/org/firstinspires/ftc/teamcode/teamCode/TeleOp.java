@@ -87,6 +87,7 @@ public class TeleOp extends LinearOpMode {
             if(sticky1.left_bumper){
                 cleste.toggle();
             }
+            
 
             vert.update();
         }

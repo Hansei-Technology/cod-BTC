@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -12,14 +13,14 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @Config
 public class Auto2Specimene extends LinearOpMode {
 
-    public static double PRELOAD_x = 31, PRELOAD_y = 0, PRELOAD_heading = 0;
-    public static double SAFE_x = 11.7, SAFE_y = -37, SAFE_heading = 270;
-    public static double SAFE2_x = 50, SAFE2_y = -37, SAFE2_heading = 180;
-    public static double ELEM1_x = 50, ELEM1_y = -48, ELEM1_heading = 180;
-    public static double HUMAN_x = 5, HUMAN_y = -65, HUMAN_heading = 190;
-    public static double SAFE3_x = 19, SAFE3_y = -65, SAFE3_heading = 180;
-    public static double SPECIMEN_x = 5, SPECIMIEN_y = -65  , SPECIMEN_heading = 180;
-    public static double PRELOAD2_x = 34.5, PRELOAD2_y = 0, PRELOAD2_heading = 0;
+    public static double PRELOAD_x = 13, PRELOAD_y = 0, PRELOAD_heading = 0;
+    public static double SAFE_x = 13, SAFE_y = -16, SAFE_heading = 270;
+    public static double SAFE2_x = 36, SAFE2_y = -23, SAFE2_heading = 180;
+    public static double ELEM1_x = 28, ELEM1_y = -40, ELEM1_heading = 180;
+    public static double HUMAN_x = 7, HUMAN_y = -40, HUMAN_heading = 180;
+    public static double SAFE3_x = 13, SAFE3_y = -40, SAFE3_heading = 180;
+    public static double SPECIMEN_x = 7, SPECIMIEN_y = -40  , SPECIMEN_heading = 180;
+    public static double PRELOAD2_x = 13, PRELOAD2_y = 0, PRELOAD2_heading = 0;
 
     public void runOpMode() throws InterruptedException{
 
@@ -30,6 +31,7 @@ public class Auto2Specimene extends LinearOpMode {
         Cleste cleste = new Cleste(hardwareMap);
         Joint joint = new Joint(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Pose2d PRELOAD = new Pose2d(PRELOAD_x, PRELOAD_y, Math.toRadians(PRELOAD_heading));
         Pose2d SAFE = new Pose2d(SAFE_x, SAFE_y, Math.toRadians(SAFE_heading));
@@ -51,7 +53,7 @@ public class Auto2Specimene extends LinearOpMode {
         vert.goToHigh();
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))
-                        .waitSeconds(0.3)
+                        .waitSeconds(0.5)
                 .lineToLinearHeading(PRELOAD)
                 .addTemporalMarker( () -> {
                     vert.goToMid();
@@ -108,6 +110,11 @@ public class Auto2Specimene extends LinearOpMode {
         while(opModeIsActive()) {
             vert.update();
             drive.update();
+            Pose2d poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.update();
         }
 
     }

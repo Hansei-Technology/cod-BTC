@@ -33,13 +33,16 @@ public class Joint {
 
     public void goDown(){
         servo.setPosition(downPos);
+        status = Status.DOWN;
     }
 
     public void goToLevel(){
         servo.setPosition(levelPos);
+        status = Status.LEVEL;
     }
 
     public void goToMid(){
         servo.setPosition(midPos);
+        status = Status.MID;
     }
 }
